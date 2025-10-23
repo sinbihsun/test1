@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 from pathlib import Path
 
-JMDICT_URL = "https://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz"  # JMdict 다운로드 URL
+JMDICT_URL = "http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz"  # JMdict 다운로드 URL
 OUT_CSV = "n5_vocab.csv"  # 저장할 CSV 파일 이름
 
 def fetch_jmdict_xml():
