@@ -1,7 +1,5 @@
 # build_from_jmdict.py
 # JMdict(EDRDG) 공개 데이터 → n5_vocab.csv 생성기
-# 라이선스 고지: JMdict/EDICT dictionary files are the property of the Electronic Dictionary Research and Development Group,
-# and are used in conformance with the Group's licence. (CC BY-SA)
 import gzip
 import io
 import re
@@ -58,7 +56,6 @@ def parse_entries(xml_bytes: bytes, limit: int | None = None):
         for s in ent.findall("sense"):
             poss = [p.text for p in s.findall("pos")]
             gloss_en = [g.text for g in s.findall("gloss") if (g.text and (g.attrib.get("lang") in (None, "eng")))]
-            # 한국어 뜻 직접 제공 X → 우선 영문 gloss를 한국어로 적당히 보조(초기엔 빈칸으로 두고 UI상 학습/편집 권장)
             senses.append({"pos": poss, "gloss_en": gloss_en})
 
         yield {
