@@ -1,0 +1,31 @@
+name: Build n5_vocab from JMdict
+on:
+  schedule:
+    - cron: "0 19 * * 1"  # 매주 화요일 오전 4시(KST)쯤 (UTC 19:00 월)
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build CSV from JMdict
+        run: |
+          python build_from_jmdict.py
+
+      - name: Commit CSV
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: refresh n5_vocab.csv from JMdict"
+          file_pattern: n5_vocab.csv
