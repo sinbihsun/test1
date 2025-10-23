@@ -1,31 +1,31 @@
 name: Build n5_vocab from JMdict
 on:
   schedule:
-    - cron: "0 19 * * 1"  # 매주 화요일 오전 4시(KST)쯤 (UTC 19:00 월)
-  workflow_dispatch:
+    - cron: "0 19 * * 1"  # 매주 월요일 19:00 UTC
+  workflow_dispatch:  # 수동 실행 가능
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2  # 리포지토리 코드 체크아웃
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Set up Python  # Python 설정
+        uses: actions/setup-python@v2
         with:
-          python-version: "3.11"
+          python-version: '3.x'
 
-      - name: Install deps
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt  # 필요한 패키지 설치
 
-      - name: Build CSV from JMdict
+      - name: Run build script
         run: |
-          python build_from_jmdict.py
+          python build_from_jmdict.py  # JMdict에서 CSV 파일 생성
 
-      - name: Commit CSV
+      - name: Auto Commit
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: refresh n5_vocab.csv from JMdict"
-          file_pattern: n5_vocab.csv
+          commit_message: "Update n5_vocab.csv"
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # PERSONAL_ACCESS_TOKEN을 사용하여 푸시
